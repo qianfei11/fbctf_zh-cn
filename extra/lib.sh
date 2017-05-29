@@ -212,10 +212,12 @@ function install_hhvm() {
   package software-properties-common
 
   log "Adding HHVM key"
-  sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
+  #sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0x5a16e7281be7a449
+  wget http://dl.hiphop-php.com/conf/hhvm.gpg.key
+  sudo apt-key add hhvm.gpg.key
 
-  log "Adding HHVM repo"
-  sudo add-apt-repository "deb http://dl.hhvm.com/ubuntu $(lsb_release -sc) main"
+  #log "Adding HHVM repo"
+  sudo add-apt-repository "deb http://dl.hiphop-php.com/ubuntu $(lsb_release -sc) main"
 
   log "Installing HHVM"
   sudo apt-get update
@@ -229,7 +231,7 @@ function install_hhvm() {
   sudo rm -Rf /var/cache/hhvm/*
 
   local __package="hhvm_3.14.5~$(lsb_release -sc)_amd64.deb"
-  dl "http://dl.hhvm.com/ubuntu/pool/main/h/hhvm/$__package" "/tmp/$__package"
+  dl "http://dl.hiphop-php.com/ubuntu/pool/main/h/hhvm/$__package" "/tmp/$__package"
   sudo dpkg -i "/tmp/$__package"
 
   log "Copying HHVM configuration"
@@ -262,10 +264,11 @@ function install_composer() {
 
   log "Installing composer"
   cd $__path
-  curl -sS https://getcomposer.org/installer | php
+  curl -sS https://install.phpcomposer.com/installer | php
   php composer.phar install
   sudo mv composer.phar /usr/bin
   sudo chmod +x /usr/bin/composer.phar
+  #composer config -g repo.packagist composer https://packagist.phpcomposer.com
 }
 
 function import_empty_db() {
